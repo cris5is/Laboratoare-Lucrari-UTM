@@ -1,0 +1,1 @@
+printf("\nMinim=%f de %d ori gasit , media=%f", min, min_count, media);

@@ -1,0 +1,6 @@
+list_numere <- [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+par_check <- functie_anonima(x) -> x % 2 egal cu 0
+list_pare <- filter(par_check, list_numere)
+converteste la lista(list_pare_iterator)
+afiseaza "lista originala: {list_numere}"
+afiseaza "lista filtrata: {list_pare}"

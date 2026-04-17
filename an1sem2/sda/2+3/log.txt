@@ -1,0 +1,25 @@
+Doilea Schimbat
+A doua adresa S
+20202020
+20
+2.20
+Trei Ultimul
+A treia adresa
+33333
+33
+3.00
+Jumatate
+Adresa 0.5
+050505
+5
+0.50
+Primul
+Prima adresa
+11111
+11
+1.00
+Primul Jumatate
+Adresa 1.5
+151515
+15
+5.00

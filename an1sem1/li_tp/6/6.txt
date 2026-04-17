@@ -1,0 +1,98 @@
+clasa lampa
+    proprietati:
+        culoare
+        aprins
+
+    constructor (culoare_noua):
+        lampa.culoare <- culoare_noua
+        lampa.aprins  <- fals
+
+    metoda aprinde():
+        daca lampa.aprins este fals:
+            lampa.aprins <- adevarat
+            afiseaza("lampa s-a aprins. culoarea " + lampa.culoare)
+        altfel:
+            afiseaza("lampa deja e aprinsa")
+
+    metoda stinge():
+        daca lampa.aprins este adevarat:
+            lampa.aprins <- fals
+            afiseaza("lampa s-a stins")
+        altfel:
+            afiseaza("lampa deja e stansa")
+sfarsit clasa
+
+clasa tamagochi
+    proprietati:
+        max_hp
+        current_hp
+        hunger
+        happiness
+
+    constructor (hp_val, hunger_val, happiness_val):
+        tamagochi.max_hp      <- hp_val
+        tamagochi.current_hp  <- hp_val
+        tamagochi.hunger      <- hunger_val
+        tamagochi.happiness   <- happiness_val
+
+    metoda give_good_food():
+        tamagochi.hunger    <- tamagochi.hunger + 5
+        tamagochi.happiness <- tamagochi.happiness + 1
+        daca (tamagochi.max_hp - tamagochi.current_hp) >= 2:
+            tamagochi.current_hp <- tamagochi.current_hp + 2
+        altfel:
+            tamagochi.current_hp <- tamagochi.max_hp
+        afiseaza("hp:" + tamagochi.current_hp + "/" + tamagochi.max_hp + " - hunger:" + tamagochi.hunger + " - happiness:" + tamagochi.happiness)
+
+    metoda give_bad_food():
+        tamagochi.hunger <- tamagochi.hunger + 1
+        daca tamagochi.happiness >= 2:
+            tamagochi.happiness <- tamagochi.happiness - 2
+        afiseaza("hunger:" + tamagochi.hunger + " - happiness:" + tamagochi.happiness)
+
+    metoda damage(amount):
+        daca tamagochi.current_hp > (amount - 1):
+            tamagochi.current_hp <- tamagochi.current_hp - amount
+        altfel:
+            tamagochi.current_hp <- 0
+        afiseaza("took " + amount + " damage => hp:" + tamagochi.current_hp + "/" + tamagochi.max_hp)
+
+    metoda stats():
+        afiseaza("hp:" + tamagochi.current_hp + "/" + tamagochi.max_hp + " - hunger:" + tamagochi.hunger + " - happiness:" + tamagochi.happiness)
+sfarsit clasa
+
+clasa cub
+    proprietati:
+        lungime
+
+    constructor (lungime_latura):
+        cub.lungime <- lungime_latura
+
+    metoda aria_suprafetei():
+        returneaza 6 * (cub.lungime ^ 2)
+
+    metoda volum():
+        returneaza cub.lungime ^ 3
+
+    metoda info():
+        aria  <- cub.aria_suprafetei()
+        volum <- cub.volum()
+        afiseaza("aria suprafetei=" + aria + " volum=" + volum)
+sfarsit clasa
+
+my_lampa <- nou lampa("albastru")
+my_lampa.aprinde()
+my_lampa.stinge()
+my_lampa.stinge()
+afiseaza("")
+
+my_tamagochi <- nou tamagochi(50, 25, 5)
+my_tamagochi.give_bad_food()
+my_tamagochi.give_good_food()
+my_tamagochi.damage(4)
+my_tamagochi.damage(7)
+my_tamagochi.stats()
+afiseaza("")
+
+my_dreptunghi <- nou cub(5)
+my_dreptunghi.info()

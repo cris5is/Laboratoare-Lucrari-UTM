@@ -1,0 +1,8 @@
+
+list_numere <- [1, 2, 3, 4, 5]
+double <- functie_anonima(x) -> x * 2
+
+list_dublu <- map(double, list_numere)
+ converteste la lista(list_dublu)
+afiseaza "lista originala: {list_numere}"
+afiseaza "lista dublata: {list_dublu}"

@@ -1,0 +1,12 @@
+importa numpy ca np
+
+arr <- np.random.randint(-10, 10, (3, 3))
+
+afiseaza(arr)
+
+media <- np.mean(arr)
+minim <- np.min(arr)
+maxim <- np.max(arr)
+determinant <- np.linalg.det(arr)
+
+afiseaza("\nmedia: " + media + "\nminim: " + minim + "\nmaxim: " + maxim + "\ndeterminantul: " + determinant)

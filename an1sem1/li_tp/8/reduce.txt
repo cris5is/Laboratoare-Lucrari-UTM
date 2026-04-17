@@ -1,0 +1,6 @@
+importa reduce
+list_numere <- [1, 2, 3, 4, 5]
+suming <- functie_anonima(x, y) -> x + y
+sum <- reduce(suming, list_numere)
+afiseaza "lista originala: {list_numere}"
+afiseaza "suma totala: {sum}"

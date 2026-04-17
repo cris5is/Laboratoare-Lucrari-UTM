@@ -1,0 +1,4 @@
+root=switch2;
+blocked:
+    switch1=Fa0/3
+    switch4=Fa0/4

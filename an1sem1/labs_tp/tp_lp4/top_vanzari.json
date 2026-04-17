@@ -1,0 +1,38 @@
+[
+    {
+        "produs": "Monitor",
+        "total": 6300.0
+    },
+    {
+        "produs": "SSD",
+        "total": 4800.0
+    },
+    {
+        "produs": "Casti",
+        "total": 3000.0
+    },
+    {
+        "produs": "Webcam",
+        "total": 2000.0
+    },
+    {
+        "produs": "Imprimanta",
+        "total": 1800.0
+    },
+    {
+        "produs": "HDD",
+        "total": 1800.0
+    },
+    {
+        "produs": "Router",
+        "total": 1620.0
+    },
+    {
+        "produs": "Mouse",
+        "total": 1600.0
+    },
+    {
+        "produs": "Tastatura",
+        "total": 1500.0
+    }
+]

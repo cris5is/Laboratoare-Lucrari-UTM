@@ -1,0 +1,20 @@
+importa math
+
+a <- converteste la float(cere input("introduceti lungimea primei catete: "))
+b <- converteste la float(cere input("introduceti lungimea celei de a doua catete: "))
+
+c <- math.sqrt(a**2 + b**2)
+aria <- 1/2 * a * b
+
+afiseaza("catete: " + a + " si " + b + "\nipotenuza: " + format(c, ".2f") + "\naria: " + format(aria, ".3f") + "\n")
+
+h <- converteste la int(rotunjeste(a))
+w <- converteste la int(rotunjeste(b))
+
+h <- maximul dintre 1 si h
+w <- maximul dintre 1 si w
+
+pentru i de la 0 pana la h-1:
+    latime <- converteste la int(rotunjeste((i + 1) * w / h))
+    latime <- maximul dintre 1 si latime
+    afiseaza(sirul "*" repetat de latime ori)

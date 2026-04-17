@@ -1,0 +1,31 @@
+6
+zero
+strada zero
+00000001
+0
+100.00
+primul.5
+strada 1.5
+4657328
+20
+9.00
+doilea
+strada a doua
+223344
+30
+3.00
+doilea.5
+strada 2.5
+004267842
+35
+5.00
+treilea
+strada a treia
+7782936
+38
+1.00
+primul derivat
+strada prima derivata
+748762
+40
+1.00

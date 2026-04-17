@@ -1,0 +1,12 @@
+importa pandas ca p
+importa matplotlib.pyplot ca plt
+
+date <- p.read_csv('4/produse.csv')
+nume <- date['nume']
+pret <- date['pret']
+
+plt.bar(nume, pret)
+plt.title('pretul produselor')
+plt.xlabel('produse')
+plt.ylabel('pret')
+plt.show()

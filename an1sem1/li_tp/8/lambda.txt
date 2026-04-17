@@ -1,0 +1,6 @@
+functie_anonima sqr (x):
+    returneaza x * x
+
+citeste inp si converteste in float
+result <- sqr(inp)
+afiseaza "patratul lui {inp}: {result}"

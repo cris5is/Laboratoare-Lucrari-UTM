@@ -1,0 +1,7 @@
+din datetime importa datetime
+
+now <- datetime.now()
+afiseaza("data: " + now)
+
+format_now <- now.strftime("%d-%m-%y %h:%m")
+afiseaza("data formatata: " + format_now)

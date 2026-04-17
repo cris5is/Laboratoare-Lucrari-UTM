@@ -1,0 +1,4 @@
+imaginea 1=alegerea filtrelor
+imaginea 2 si 3= ping la compuri de pe acelasi hub
+imaginea 4_1 si 4_2= ping la compuri de pe huburi diferite, il trimite pe bridge, si deamu la hubu celalalt
+imaginea 5= pentru ca nu o gasit pe portu ceala pc2, pachetu e transmis pe bridge, si el deamu trimite la restu huburi sa controleze unde e pc2, si caroce invata el adresa MAC din nou, caroce dinamic se schimba

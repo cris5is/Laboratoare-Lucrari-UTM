@@ -1,0 +1,32 @@
+importa tkinter ca tk
+importa combinatorica ca comb
+
+functie use_fact():
+    numar <- converteste la int(ia valoarea din entry)
+    daca numar este adevarat (nu este zero sau gol):
+        result.config(text <- comb.factorial(numar))
+    altfel:
+        result.config(text <- "introduceti un numar natural")
+
+functie use_subfact():
+    numar <- converteste la int(ia valoarea din entry)
+    daca numar este adevarat (nu este zero sau gol):
+        result.config(text <- comb.sub_factorial(numar))
+    altfel:
+        result.config(text <- "introduceti un numar natural")
+
+root <- tk.tk()
+root.title("test")
+root.geometry("200x200")
+
+entry <- tk.entry(root, width <- 25)
+entry.pack()
+
+btn_fact <- tk.button(root, text <- "factorial", command <- use_fact)
+btn_fact.pack(pady <- 10)
+btn_subfact <- tk.button(root, text <- "subfactorial", command <- use_subfact)
+btn_subfact.pack(pady <- 10)
+
+result <- tk.label(root, text <- "", font <- ("arial", 14), fg <- "blue")
+result.pack(pady <- 10)
+root.mainloop()

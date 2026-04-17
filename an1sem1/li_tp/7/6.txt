@@ -1,0 +1,37 @@
+importa cv2
+
+file_in <- "monkey-rizz.gif"
+file_out <- "c:/users/culac/desktop/labs/li_tp/7/miscare_simpla.avi"
+varthreshold <- 30
+history <- 300
+
+cap <- cv2.videocapture(file_in)
+daca nu cap.isopened():
+    afiseaza("eroare")
+    iesire(1)
+
+w <- converteste la int(cap.get(cv2.cap_prop_frame_width))
+h <- converteste la int(cap.get(cv2.cap_prop_frame_height))
+fps <- cap.get(cv2.cap_prop_fps)
+daca fps este 0:
+    fps <- 10.0
+
+fourcc <- cv2.videowriter_fourcc(*'xvid')
+out <- cv2.videowriter(file_out, fourcc, fps, (w, h), iscolor <- fals)
+
+fgbg <- cv2.createbackgroundsubtractormog2(history <- history, varthreshold <- varthreshold, detectshadows <- fals)
+
+cat timp cap.isopened():
+    ret, frame <- cap.read()
+    daca nu ret:
+        opreste ciclul
+    gray <- cv2.cvtcolor(frame, cv2.color_bgr2gray)
+    gray <- cv2.gaussianblur(gray, (15, 15), 0)
+    fgmask <- fgbg.apply(gray)
+    _, fgmask <- cv2.threshold(fgmask, 127, 255, cv2.thresh_binary)
+    fgmask <- cv2.dilate(fgmask, gol, iterations <- 2)
+    out.write(fgmask)
+
+cap.release()
+out.release()
+cv2.destroyallwindows()
