@@ -92,7 +92,7 @@ void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pas, 
         int pondere = g->adi_mat[curent][j];
         if (pondere != 0) {
             if (h[j] - h[curent] == pondere) {
-                printDrumuri(g, h, j, final, drum, pas + 1, n);
+                printDrumuriF(g, h, j, final, drum, pas + 1, n);
             }
         }
     }
@@ -126,7 +126,7 @@ void fordMinim(Graph* g, int n) {
         printf("Nu exista drum de la nodul 1 la %d\n", n);
     } else {
         printf("Lungimea minima a drumului: %d\n", h[n - 1]);
-        printDrumuri(g, h, 0, n - 1, drum, 0, n);
+        printDrumuriF(g, h, 0, n - 1, drum, 0, n);
     }
 
     free(drum);
