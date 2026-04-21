@@ -47,7 +47,10 @@ void printMat(Graph* g, int n) {
     for (int i = 0; i < n; i++) {
         printf("\n  x%d | ", i + 1);
         for (int j = 0; j < n; j++) {
-            printf("%3d ", g->adi_mat[i][j]);
+            if (g->adi_mat[i][j] == 0 && i != j)
+                printf("inf ");
+            else
+                printf("%3d ", g->adi_mat[i][j]);
         }
     }
     printf("\n\n");
@@ -79,11 +82,11 @@ void freeMem(Graph* g, int n) {
         g->adi_mat = NULL;
     }
 }
-void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pas, int n) {
-    drum[pas] = curent;
+void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pos, int n) {
+    drum[pos] = curent;
     if (curent == final) {
-        for (int i = 0; i <= pas; i++) {
-            printf("%d%s", drum[i] + 1, (i == pas ? "" : "->"));
+        for (int i = 0; i <= pos; i++) {
+            printf("%d%s", drum[i] + 1, (i == pos ? "" : "->"));
         }
         printf("\n");
         return;
@@ -92,11 +95,12 @@ void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pas, 
         int pondere = g->adi_mat[curent][j];
         if (pondere != 0) {
             if (h[j] - h[curent] == pondere) {
-                printDrumuriF(g, h, j, final, drum, pas + 1, n);
+                printDrumuriF(g, h, j, final, drum, pos + 1, n);
             }
         }
     }
 }
+
 void fordMinim(Graph* g, int n) {
     if (g == NULL || g->adi_mat == NULL)
         return;
@@ -104,7 +108,6 @@ void fordMinim(Graph* g, int n) {
     int* h = (int*)malloc(n * sizeof(int));
     for (int i = 0; i < n; i++) h[i] = 1000000;
     h[0] = 0;
-
     int schimbat;
     for (int k = 0; k < n - 1; k++) {
         schimbat = 0;
