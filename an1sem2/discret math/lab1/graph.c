@@ -191,7 +191,6 @@ void inc_to_list(Graph* g, int n, int k) {
         }
         if (enter != -1 && exit != -1) {
             count[enter]++;
-            printf("count[%d]=%d, exit=%d\n", enter, count[enter], exit);
             g->adi_list[enter] =
                 (int*)realloc(g->adi_list[enter], (count[enter] + 1) * sizeof(int));
             g->adi_list[enter][count[enter] - 1] = exit;

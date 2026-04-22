@@ -2,6 +2,34 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+void addQueue(ElementQueue** first, ElementQueue** last, int* newNode) {
+    ElementQueue* temp;
+    temp = (ElementQueue*)calloc(1, sizeof(*temp));
+    if (temp == NULL)
+        return;
+    temp->address = newNode;
+    temp->next = NULL;
+    if (*first == NULL)
+        *first = temp;
+    else {
+        (*last)->next = temp;
+    }
+    *last = temp;
+}
+
+int* delQueue(ElementQueue** first, ElementQueue** last) {
+    ElementQueue* temp;
+    int* result;
+    temp = *first;
+    result = temp->address;
+    if (temp == *last) {
+        *first = *last = NULL;
+    } else {
+        *first = temp->next;
+    }
+    free(temp);
+    return result;
+}
 void read_mat_inc(Graph* g, int n, int k) {
     g->inc_mat = (int**)malloc(k * sizeof(int*));
     for (int i = 0; i < k; i++) {
@@ -110,40 +138,108 @@ void freeMem(Graph* g, int n, int k) {
         g->adi_list = NULL;
     }
 }
+void adi_to_list(Graph* g, int n) {
+    g->adi_list = (int**)malloc(n * sizeof(int*));
+
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+        g->adi_list[i] = NULL;
+        for (int j = 0; j < n; j++) {
+            if (g->adi_mat[i][j] != 0) {
+                count++;
+                g->adi_list[i] = (int*)realloc(g->adi_list[i], (count + 1) * sizeof(int));
+                g->adi_list[i][count - 1] = j + 1;
+                g->adi_list[i][count] = 0;
+            }
+        }
+
+        if (count == 0) {
+            g->adi_list[i] = (int*)malloc(sizeof(int));
+            g->adi_list[i][0] = 0;
+        }
+    }
+}
+void inc_to_list(Graph* g, int n, int k) {
+    g->adi_list = (int**)malloc(n * sizeof(int*));
+    int* count = (int*)calloc(n, sizeof(int));
+    for (int i = 0; i < n; i++) {
+        g->adi_list[i] = (int*)malloc(sizeof(int));
+        g->adi_list[i][0] = 0;
+    }
+    for (int i = 0; i < k; i++) {
+        int enter = -1, exit = -1;
+        for (int j = 0; j < n; j++) {
+            if (g->inc_mat[i][j] == -1) {
+                enter = j;
+            } else if (g->inc_mat[i][j] == 1) {
+                exit = j + 1;
+            } else if (g->inc_mat[i][j] != 0) {
+                enter = j;
+                exit = j + 1;
+            }
+        }
+        if (enter != -1 && exit != -1) {
+            count[enter]++;
+            g->adi_list[enter] =
+                (int*)realloc(g->adi_list[enter], (count[enter] + 1) * sizeof(int));
+            g->adi_list[enter][count[enter] - 1] = exit;
+            g->adi_list[enter][count[enter]] = 0;
+            enter = -1;
+            exit = -1;
+        }
+    }
+}
+void free_mem(Graph* g, int n, int k) {
+    if (g->inc_mat != NULL) {
+        for (int i = 0; i < k; i++) free(g->inc_mat[i]);
+        free(g->inc_mat);
+        g->inc_mat = NULL;
+    }
+    if (g->adi_mat != NULL) {
+        for (int i = 0; i < n; i++) free(g->adi_mat[i]);
+        free(g->adi_mat);
+        g->adi_mat = NULL;
+    }
+    if (g->adi_list != NULL) {
+        for (int i = 0; i < n; i++) free(g->adi_list[i]);
+        free(g->adi_list);
+        g->adi_list = NULL;
+    }
+}
 void acoperireAdiList(Graph* g, int n, ElementQueue** FA1First, ElementQueue** FA1Last, ElementQueue** FA2First, ElementQueue** FA2Last, int start) {
     int* visited = (int*)calloc(n, sizeof(int));
-    if (visited == NULL) {
-        free(visited);
+    if (visited == NULL)
         return;
-    }
     int* nodes = (int*)malloc(n * sizeof(int));
     if (nodes == NULL) {
         free(visited);
-        free(nodes);
         return;
     }
-    for (int i = start; i < n; i++) {
+    g->adi_acoperire = (int**)malloc(n * sizeof(int*));
+    for (int i = 0; i < n; i++) {
+        g->adi_acoperire[i] = (int*)calloc(n, sizeof(int));
+    }
+    for (int i = 0; i < n; i++) {
         nodes[i] = i;
     }
-    for (int i = start; i < n; i++) {
-        if (visited[i] != 0)
+    int s = start - 1;
+    for (int i = 0; i < n; i++) {
+        int radacina = (i == 0) ? s : i;
+        if (visited[radacina] != 0)
             continue;
-
-        visited[i] = 1;
-        printf("%d ", nodes[i] + 1);
-        addQueue(FA1First, FA1Last, &nodes[i]);
+        visited[radacina] = 1;
+        addQueue(FA1First, FA1Last, &nodes[radacina]);
         while (*FA1First != NULL) {
             while (*FA1First != NULL) {
                 int* curr = delQueue(FA1First, FA1Last);
-                visited[*curr] = 1;
                 int len = 0;
-                for (int j = 0; g->adi_list[*curr][j] != 0; j++) len++;
+                while (g->adi_list[*curr][len] != 0) len++;
                 for (int j = 0; j < len; j++) {
                     int adiacent = g->adi_list[*curr][j] - 1;
                     if (visited[adiacent] == 0) {
-                        addQueue(FA2First, FA2Last, &nodes[adiacent]);
-                        printf("%d ", adiacent + 1);
                         visited[adiacent] = 1;
+                        addQueue(FA2First, FA2Last, &nodes[adiacent]);
+                        g->adi_acoperire[*curr][adiacent] = 1;
                     }
                 }
             }
@@ -152,7 +248,12 @@ void acoperireAdiList(Graph* g, int n, ElementQueue** FA1First, ElementQueue** F
             *FA2First = *FA2Last = NULL;
         }
     }
-    printf("\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%d ", g->adi_acoperire[i][j]);
+        }
+        printf("\n");
+    }
     free(visited);
     free(nodes);
 }
