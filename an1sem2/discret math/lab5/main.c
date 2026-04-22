@@ -19,9 +19,10 @@ int main() {
         switch (option) {
             case 1:
                 printf("Nr. de varfuri: ");
-                scanf("%d", &n);
-                init_retea(&r, n);
-                citire_retea(&r, NULL);
+                while (scanf("%d", &n) != 1 || n < 0) {
+                    printf("Valoare invalida, introduceti din nou (n>=0): ");
+                }
+                citire_retea(&r, NULL, n);
                 retea_creata = 1;
                 break;
             case 2:
@@ -29,21 +30,27 @@ int main() {
                     printf("Creati reteaua intai!\n");
                     break;
                 }
-                printf("Nod intrare (a): ");
-                scanf("%d", &sursa);
-                printf("Nod iesire (b): ");
-                scanf("%d", &destinatie);
-                flux_max = ford_fulkerson(&r, sursa - 1, destinatie - 1);
-                printf("Calcul finalizat.\n");
+                printf("Nod intrare: ");
+                while (scanf("%d", &sursa) != 1 || sursa < 1 || sursa >= n) {
+                    printf("Valoare invalida [1,%d]: ", n);
+                }
+                printf("Nod iesire: ");
+                while (scanf("%d", &destinatie) != 1 || destinatie <= sursa || destinatie >= n) {
+                    printf("Valoare invalida [%d,%d]: ", sursa, n);
+                }
+                flux_max = ford_fulkerson(&r, sursa - 1, destinatie - 1, n);
                 break;
             case 3:
                 if (retea_creata)
-                    afisare_rezultate(&r, flux_max);
+                    afisare_rezultate(&r, flux_max, n);
                 break;
             case 4:
                 if (retea_creata)
-                    free_retea(&r);
+                    free_retea(&r, n);
                 return 0;
+            default:
+                printf("Valoare invalida.\n");
+                break;
         }
     } while (1);
 

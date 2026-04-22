@@ -1,6 +1,5 @@
 #ifndef FLUX
 #define FLUX
-
 #include <stdbool.h>
 
 typedef struct graph {
@@ -19,18 +18,12 @@ typedef struct element_queue {
     struct element_queue* next;
 } ElementQueue;
 
-typedef struct element_stack {
-    int* address;
-    struct element_stack* next;
-} ElementStack;
-
 void addQueue(ElementQueue** first, ElementQueue** last, int* newNode);
 int* delQueue(ElementQueue** first, ElementQueue** last);
-void init_retea(Retea* r, int n);
-void citire_retea(Retea* r, Graph* g);
-bool bfs_flux(Retea* r, int sursa, int destinatie);
-int ford_fulkerson(Retea* r, int sursa, int destinatie);
-void afisare_rezultate(Retea* r, int flux_max);
-void free_retea(Retea* r);
+void readRetea(Retea* r, Graph* g, int n);
+bool calcFlux(Retea* r, int sursa, int destinatie, int n);
+int fordFlukerson(Retea* r, int sursa, int destinatie, int n);
+void printResult(Retea* r, int flux_max, int n);
+void freeMem(Retea* r, int n);
 
 #endif
