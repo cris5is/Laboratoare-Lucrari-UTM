@@ -30,16 +30,16 @@ int* delQueue(ElementQueue** first, ElementQueue** last) {
     return result;
 }
 
-void readRetea(Retea* r, Graph* g, int n) {
+void readRetea(Retea* r, int n, int** vizitat, int** nodes) {
     int u, v, cap;
     r->M_capacity = (int**)calloc(n, sizeof(int*));
     r->M_flux = (int**)calloc(n, sizeof(int*));
-    r->parinte = (int*)calloc(n, sizeof(int));
+    r->root = (int*)calloc(n, sizeof(int));
     for (int i = 0; i < n; i++) {
         r->M_capacity[i] = (int*)calloc(n, sizeof(int));
         r->M_flux[i] = (int*)calloc(n, sizeof(int));
     }
-    printf("Introduceti arcele sub forma 'sursa destinatie capacitate' (0 0 0 pentru stop):\n");
+    printf("Introduceti arcele sub forma \nsursa destinatie capacitate (0 0 0 pentru stop):\n");
     while (scanf("%d %d %d", &u, &v, &cap) == 3 && (u != 0)) {
         if (u > 0 && u <= n && v > 0 && v <= n) {
             r->M_capacity[u - 1][v - 1] = cap;
@@ -47,28 +47,27 @@ void readRetea(Retea* r, Graph* g, int n) {
             printf("Noduri invalide!\n");
         }
     }
+    *vizitat = (int*)calloc(n, sizeof(int));
+    *nodes = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) (*nodes)[i] = i;
 }
 
-bool calcFlux(Retea* r, int sursa, int destinatie, int n) {
-    int* vizitat = (int*)calloc(r->n, sizeof(int));
-    int* nodes = (int*)malloc(r->n * sizeof(int));
-    for (int i = 0; i < r->n; i++) nodes[i] = i;
-
+bool calcFlux(Retea* r, int sursa, int destinatie, int n, int** vizitat, int** nodes) {
+    memset(*vizitat, 0, n * sizeof(int));
     ElementQueue *first = NULL, *last = NULL;
-
-    vizitat[sursa] = 1;
-    r->parinte[sursa] = -1;
-    addQueue(&first, &last, &nodes[sursa]);
+    (*vizitat)[sursa] = 1;
+    r->root[sursa] = -1;
+    addQueue(&first, &last, nodes[sursa]);
 
     bool gasit = false;
     while (first != NULL) {
         int u = *(delQueue(&first, &last));
 
         for (int v = 0; v < n; v++) {
-            if (!vizitat[v] && (r->M_capacity[u][v] - r->M_flux[u][v] > 0)) {
-                r->parinte[v] = u;
-                vizitat[v] = 1;
-                addQueue(&first, &last, &nodes[v]);
+            if (!(*vizitat)[v] && (r->M_capacity[u][v] - r->M_flux[u][v] > 0)) {
+                r->root[v] = u;
+                (*vizitat)[v] = 1;
+                addQueue(&first, &last, nodes[v]);
                 if (v == destinatie) {
                     gasit = true;
                     break;
@@ -79,29 +78,29 @@ bool calcFlux(Retea* r, int sursa, int destinatie, int n) {
             break;
     }
     while (first != NULL) delQueue(&first, &last);
-    free(vizitat);
-    free(nodes);
     return gasit;
 }
 
-int fordFlukerson(Retea* r, int sursa, int destinatie, int n) {
+int fordFlukerson(Retea* r, int sursa, int destinatie, int n, int** vizitat, int** nodes) {
     int flux_max = 0;
-    while (calcFlux(r, sursa, destinatie, n)) {
+    while (calcFlux(r, sursa, destinatie, n, vizitat, nodes)) {
         int flux_drum = 10000000;
 
-        for (int v = destinatie; v != sursa; v = r->parinte[v]) {
-            int u = r->parinte[v];
+        for (int v = destinatie; v != sursa; v = r->root[v]) {
+            int u = r->root[v];
             if (r->M_capacity[u][v] - r->M_flux[u][v] < flux_drum)
                 flux_drum = r->M_capacity[u][v] - r->M_flux[u][v];
         }
 
-        for (int v = destinatie; v != sursa; v = r->parinte[v]) {
-            int u = r->parinte[v];
+        for (int v = destinatie; v != sursa; v = r->root[v]) {
+            int u = r->root[v];
             r->M_flux[u][v] += flux_drum;
             r->M_flux[v][u] -= flux_drum;
         }
         flux_max += flux_drum;
     }
+    free(*vizitat);
+    free(*nodes);
     return flux_max;
 }
 
@@ -122,5 +121,5 @@ void freeMem(Retea* r, int n) {
     }
     free(r->M_capacity);
     free(r->M_flux);
-    free(r->parinte);
+    free(r->root);
 }

@@ -7,6 +7,10 @@ int main() {
     g.inc_mat = NULL;
     g.adi_mat = NULL;
     g.adi_list = NULL;
+    Graph g_acoperit;
+    g_acoperit.inc_mat = NULL;
+    g_acoperit.adi_mat = NULL;
+    g_acoperit.adi_list = NULL;
     ElementQueue *FA1first = NULL, *FA1last = NULL, *FA2first = NULL, *FA2last = NULL;
     int cond = 0;
     int n = 0, option = 0, k = 0, option2 = 0;
@@ -51,7 +55,6 @@ int main() {
                 }
                 break;
             case 2:
-
                 switch (option2) {
                     case 1:
                         print_inc_mat(&g, n, k);
@@ -73,7 +76,7 @@ int main() {
                 while (scanf("%d", &start) != 1 || start < 1 || start > n) {
                     printf("Introduceti valoarea din limitele propuse [1,%d]: ", n);
                 }
-                acoperireAdiList(&g, n, &FA1first, &FA1last, &FA2first, &FA2last, start);
+                acoperireAdiList(&g, &g_acoperit, n, &FA1first, &FA1last, &FA2first, &FA2last, start);
                 break;
             case 4:
 

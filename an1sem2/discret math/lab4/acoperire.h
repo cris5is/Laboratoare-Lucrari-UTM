@@ -4,7 +4,6 @@ typedef struct graph {
     int** inc_mat;
     int** adi_mat;
     int** adi_list;
-    int** adi_acoperire;
 } Graph;
 typedef struct element_queue {
     int* address;
@@ -20,6 +19,6 @@ void adi_to_list(Graph* g, int n);
 void inc_to_list(Graph* g, int n, int k);
 void addQueue(ElementQueue** first, ElementQueue** last, int* newNode);
 int* delQueue(ElementQueue** first, ElementQueue** last);
-void acoperireAdiList(Graph* g, int n, ElementQueue** FA1First, ElementQueue** FA1Last, ElementQueue** FA2First, ElementQueue** FA2Last, int start);
+void acoperireAdiList(Graph* g, Graph* acoperit, int n, ElementQueue** FA1First, ElementQueue** FA1Last, ElementQueue** FA2First, ElementQueue** FA2Last, int start);
 void freeMem(Graph* g, int n, int k);
 #endif
