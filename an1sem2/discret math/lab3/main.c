@@ -10,7 +10,7 @@ int main() {
     do {
         printf("1. Introducerea grafului(matricea de adiacenta ponderata)\n2. Afisarea matricei de adiacenta\n");
         printf("3. Drum Minim (Ford)\n4. Drum Minim (Bellman-Calaba)\n");
-        printf("5. Salvarea in fisier (graf)\n6. Iesire\n");
+        printf("5. Iesire\n");
         printf("Alege optiunea: ");
         scanf("%d", &option);
         switch (option) {
@@ -31,9 +31,6 @@ int main() {
                 bellman_kalabaMinim(&g, n);
                 break;
             case 5:
-                writeInfo(&g, n);
-                break;
-            case 6:
                 freeMem(&g, n);
                 cond = 1;
                 break;

@@ -28,8 +28,8 @@ void readMat(Graph* g, int n) {
         g->adi_mat[i] = (int*)calloc(n, sizeof(int));
         printf("arr[%d] ponderat (scrie tot randul): ", i);
         for (int j = 0; j < n; j++) {
-            while (scanf("%d", &g->adi_mat[i][j]) != 1) {
-                printf("Valoare invalida, citeste din nou de la arr[%d][%d] elementele ramase in rand\n", i, j);
+            while (scanf("%d", &g->adi_mat[i][j]) != 1 || g->adi_mat[i][j] < 0) {
+                printf("Valoare invalida, citeste din nou de la arr[%d][%d] ( >=0 ) elementele ramase in rand\n", i, j);
             }
         }
     }
@@ -82,20 +82,22 @@ void freeMem(Graph* g, int n) {
         g->adi_mat = NULL;
     }
 }
-void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pos, int n) {
+void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pos, int n, FILE** fptr) {
     drum[pos] = curent;
     if (curent == final) {
         for (int i = 0; i <= pos; i++) {
             printf("%d%s", drum[i] + 1, (i == pos ? "" : "->"));
+            fprintf(*fptr, "%d%s", drum[i] + 1, (i == pos ? "" : "->"));
         }
         printf("\n");
+        fprintf(*fptr, "\n");
         return;
     }
     for (int j = 0; j < n; j++) {
         int pondere = g->adi_mat[curent][j];
         if (pondere != 0) {
             if (h[j] - h[curent] == pondere) {
-                printDrumuriF(g, h, j, final, drum, pos + 1, n);
+                printDrumuriF(g, h, j, final, drum, pos + 1, n, fptr);
             }
         }
     }
@@ -104,7 +106,11 @@ void printDrumuriF(Graph* g, int* h, int curent, int final, int* drum, int pos, 
 void fordMinim(Graph* g, int n) {
     if (g == NULL || g->adi_mat == NULL)
         return;
-
+    FILE* fptr = fopen("logF.txt", "w");
+    if (fptr == NULL) {
+        printf("eroare ceva\n");
+        return;
+    }
     int* h = (int*)malloc(n * sizeof(int));
     for (int i = 0; i < n; i++) h[i] = 1000000;
     h[0] = 0;
@@ -129,19 +135,22 @@ void fordMinim(Graph* g, int n) {
         printf("Nu exista drum de la nodul 1 la %d\n", n);
     } else {
         printf("Lungimea minima a drumului: %d\n", h[n - 1]);
-        printDrumuriF(g, h, 0, n - 1, drum, 0, n);
+        fprintf(fptr, "%d\n", h[n - 1]);
+        printDrumuriF(g, h, 0, n - 1, drum, 0, n, &fptr);
     }
-
+    fclose(fptr);
     free(drum);
     free(h);
 }
-void printDrumuriBK(Graph* g, int* V, int curent, int final, int* drum, int pas, int n) {
+void printDrumuriBK(Graph* g, int* V, int curent, int final, int* drum, int pas, int n, FILE** fptr) {
     drum[pas] = curent;
     if (curent == final) {
         for (int i = 0; i <= pas; i++) {
-            printf("%d%s", drum[i] + 1, (i == pas ? "" : " -> "));
+            printf("%d%s", drum[i] + 1, (i == pas ? "" : "->"));
+            fprintf(*fptr, "%d%s", drum[i] + 1, (i == pas ? "" : "->"));
         }
         printf("\n");
+        fprintf(*fptr, "\n");
         return;
     }
 
@@ -149,7 +158,7 @@ void printDrumuriBK(Graph* g, int* V, int curent, int final, int* drum, int pas,
         if (curent != j && g->adi_mat[curent][j] != 0) {
             int pondere = g->adi_mat[curent][j];
             if (V[curent] == pondere + V[j]) {
-                printDrumuriBK(g, V, j, final, drum, pas + 1, n);
+                printDrumuriBK(g, V, j, final, drum, pas + 1, n, fptr);
             }
         }
     }
@@ -158,7 +167,11 @@ void printDrumuriBK(Graph* g, int* V, int curent, int final, int* drum, int pas,
 void bellman_kalabaMinim(Graph* g, int n) {
     if (g == NULL || g->adi_mat == NULL)
         return;
-
+    FILE* fptr = fopen("logBK.txt", "w");
+    if (fptr == NULL) {
+        printf("eroare ceva\n");
+        return;
+    }
     int** M = (int**)malloc(n * sizeof(int*));
     for (int i = 0; i < n; i++) {
         M[i] = (int*)malloc(n * sizeof(int));
@@ -208,9 +221,10 @@ void bellman_kalabaMinim(Graph* g, int n) {
         printf("Nu exista drum de la nodul 1 la %d\n", n);
     } else {
         printf("Lungimea minima a drumului: %d\n", V0[0]);
-        printDrumuriBK(g, V0, 0, n - 1, drum, 0, n);
+        fprintf(fptr, "%d\n", V0[0]);
+        printDrumuriBK(g, V0, 0, n - 1, drum, 0, n, &fptr);
     }
-
+    fclose(fptr);
     free(drum);
     for (int i = 0; i < n; i++) free(M[i]);
     free(M);

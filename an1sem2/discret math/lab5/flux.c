@@ -99,6 +99,7 @@ int fordFlukerson(Retea* r, int sursa, int destinatie, int n, int** vizitat, int
         }
         flux_max += flux_drum;
     }
+
     free(*vizitat);
     free(*nodes);
     return flux_max;

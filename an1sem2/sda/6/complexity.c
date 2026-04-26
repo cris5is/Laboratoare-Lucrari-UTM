@@ -32,9 +32,9 @@ int bsearchRec(int* arr, int target, int left, int right) {
     }
     return cautareBinaraRecursiva(arr, mid + 1, right, target);
 }
+
 void compare(const void* one, const void* two) {
     int a = *(int*)one;
     int b = *(int*)one;
-
     return (a - b);
 }
