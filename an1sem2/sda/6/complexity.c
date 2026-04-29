@@ -10,7 +10,7 @@ int compare(const void* a, const void* b) {
     return (*(int*)a - *(int*)b);
 }
 
-void merge(int* arr, int low, int mid, int high, Analiza* res) {
+void merge(int* arr, int low, int mid, int high, Analiza* stats) {
     int n1 = mid - low + 1;
     int n2 = high - mid;
     int* left = (int*)malloc(n1 * sizeof(int));
@@ -21,7 +21,7 @@ void merge(int* arr, int low, int mid, int high, Analiza* res) {
 
     int i = 0, j = 0, k = low;
     while (i < n1 && j < n2) {
-        res->checks++;
+        stats->checks++;
         if (left[i] <= right[j]) {
             arr[k] = left[i];
             i++;
@@ -29,46 +29,46 @@ void merge(int* arr, int low, int mid, int high, Analiza* res) {
             arr[k] = right[j];
             j++;
         }
-        res->changes++;
+        stats->changes++;
         k++;
     }
     while (i < n1) {
         arr[k] = left[i];
         i++;
         k++;
-        res->changes++;
+        stats->changes++;
     }
     while (j < n2) {
         arr[k] = right[j];
         j++;
         k++;
-        res->changes++;
+        stats->changes++;
     }
     free(left);
     free(right);
 }
 
-void mergeSort(int* arr, int low, int high, Analiza* res) {
+void mergeSort(int* arr, int low, int high, Analiza* stats) {
     if (low < high) {
         int mid = low + (high - low) / 2;
-        mergeSort(arr, low, mid, res);
-        mergeSort(arr, mid + 1, high, res);
-        merge(arr, low, mid, high, res);
+        mergeSort(arr, low, mid, stats);
+        mergeSort(arr, mid + 1, high, stats);
+        merge(arr, low, mid, high, stats);
     }
 }
 
-void heapify(int* arr, int n, int i, Analiza* res) {
+void heapify(int* arr, int n, int i, Analiza* stats) {
     int largest = i;
     int low = 2 * i + 1;
     int high = 2 * i + 2;
 
     if (low < n) {
-        res->checks++;
+        stats->checks++;
         if (arr[low] > arr[largest])
             largest = low;
     }
     if (high < n) {
-        res->checks++;
+        stats->checks++;
         if (arr[high] > arr[largest])
             largest = high;
     }
@@ -77,19 +77,19 @@ void heapify(int* arr, int n, int i, Analiza* res) {
         int temp = arr[i];
         arr[i] = arr[largest];
         arr[largest] = temp;
-        res->changes++;
-        heapify(arr, n, largest, res);
+        stats->changes++;
+        heapify(arr, n, largest, stats);
     }
 }
 
-void heapSort(int* arr, int n, Analiza* res) {
-    for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i, res);
+void heapSort(int* arr, int n, Analiza* stats) {
+    for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i, stats);
     for (int i = n - 1; i > 0; i--) {
         int temp = arr[0];
         arr[0] = arr[i];
         arr[i] = temp;
-        res->changes++;
-        heapify(arr, i, 0, res);
+        stats->changes++;
+        heapify(arr, i, 0, stats);
     }
 }
 

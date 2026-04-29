@@ -9,9 +9,9 @@ typedef struct {
 
 extern long long qsortChecks;
 int compare(const void* a, const void* b);
-void merge(int* arr, int low, int mid, int high, Analiza* res);
-void mergeSort(int* arr, int low, int high, Analiza* res);
-void heapify(int* arr, int n, int i, Analiza* res);
-void heapSort(int* arr, int n, Analiza* res);
+void merge(int* arr, int low, int mid, int high, Analiza* stats);
+void mergeSort(int* arr, int low, int high, Analiza* stats);
+void heapify(int* arr, int n, int i, Analiza* stats);
+void heapSort(int* arr, int n, Analiza* stats);
 void analizaEmpirica(int n, int type);
 #endif
