@@ -240,6 +240,7 @@ void acoperireAdiList(Graph* g, Graph* acoperit, int n, ElementQueue** FA1First,
                         visited[adiacent] = 1;
                         addQueue(FA2First, FA2Last, &nodes[adiacent]);
                         acoperit->adi_mat[*curr][adiacent] = 1;
+                        acoperit->adi_mat[adiacent][*curr] = 1;
                     }
                 }
             }
