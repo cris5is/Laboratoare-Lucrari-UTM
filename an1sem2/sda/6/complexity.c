@@ -136,7 +136,7 @@ void analizaEmpirica(int n, int type) {
     end = clock();
     double qTime_ms = ((double)(end - start) * 1000.0) / CLOCKS_PER_SEC;
 
-    printf("\nN = %d\n", n);
+    printf("\nn = %d\n", n);
     printf("%-12s | %-15s | %-12s | %-12s\n", "Algoritm", "Timp (ms)", "Comparatii", "Mutari");
     printf("%-12s | %15.6f | %-12lld | %-12lld\n", "MergeSort", mergeStats.ms, mergeStats.checks, mergeStats.changes);
     printf("%-12s | %15.6f | %-12lld | %-12lld\n", "HeapSort", heapStats.ms, heapStats.checks, heapStats.changes);
