@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 struct Hotel
 {
@@ -9,9 +10,10 @@ struct Hotel
     void citire()
     {
         cout << "Nume:";
-        cin >> Nume;
+        getline(cin, Nume);
         cout << "Stele:";
         cin >> Stele;
+        cin.ignore();
     }
     void setNume(string name)
     {
@@ -24,6 +26,9 @@ struct Hotel
     void Import(string numefisier)
     {
         ifstream Readed(numefisier);
+        getline(Readed, Nume);
+        Readed >> Stele;
+        Readed.close();
     }
     void Afisare()
     {
@@ -47,15 +52,16 @@ void Afisare(Hotel *arr, int n)
     {
         cout << i + 1 << ". " << arr[i].Nume << "  Nr. Stele = " << arr[i].Stele << endl;
     }
+    cout << endl;
 }
 Hotel *Adauga(Hotel nou, Hotel *arr, int &n)
 {
     Hotel *new_arr = new Hotel[n + 1];
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i < n + 1; i++)
     {
-        new_arr[i] = arr[i];
+        new_arr[i] = arr[i - 1];
     }
-    new_arr[n] = nou;
+    new_arr[0] = nou;
     n += 1;
     return new_arr;
 }
@@ -67,6 +73,7 @@ void Export(Hotel *arr, string numefisier, int n)
         Exported << arr[i].Nume << endl
                  << arr[i].Stele << endl;
     }
+    Exported.close();
 }
 
 int main()
@@ -74,6 +81,7 @@ int main()
     int n;
     cout << "n=";
     cin >> n;
+    cin.ignore();
     Hotel *hoteluri = new Hotel[n];
     for (int i = 0; i < n; i++)
         hoteluri[i].citire();
