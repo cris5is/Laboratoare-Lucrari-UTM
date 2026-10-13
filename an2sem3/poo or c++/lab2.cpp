@@ -1,7 +1,10 @@
 #include <iostream>
 #include <string>
 using namespace std;
-
+enum State
+{
+    Anulat,
+};
 class BiletCinema
 {
     string codRezervare;
