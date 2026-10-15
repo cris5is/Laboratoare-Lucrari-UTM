@@ -5,6 +5,7 @@ import pandas as pd
 sys.setrecursionlimit(20000)
 sys.set_int_max_str_digits(0)
 
+
 class Counter:
     def __init__(self):
         self.aritmetice = 0
@@ -15,7 +16,7 @@ class Counter:
     @property
     def Nop(self):
         return self.aritmetice + self.comparatii + self.logice
-    
+
     def reset(self):
         self.aritmetice = 0
         self.comparatii = 0
@@ -27,6 +28,7 @@ class Counter:
                 f"comp={self.comparatii}, logice={self.logice}), "
                 f"iteratii/apeluri={self.iteratii_apeluri}")
 
+
 def merge_sort(arr, c: Counter):
     c.iteratii_apeluri += 1
     c.comparatii += 1
@@ -37,6 +39,7 @@ def merge_sort(arr, c: Counter):
     left = merge_sort(arr[:mid], c)
     right = merge_sort(arr[mid:], c)
     return merge(left, right, c)
+
 
 def merge(left, right, c: Counter):
     result = []
@@ -73,6 +76,7 @@ def merge(left, right, c: Counter):
         c.aritmetice += 1
     return result
 
+
 def quick_sort(arr, low, high, c: Counter):
     c.iteratii_apeluri += 1
     c.comparatii += 1
@@ -82,6 +86,7 @@ def quick_sort(arr, low, high, c: Counter):
         c.aritmetice += 1
         quick_sort(arr, pi + 1, high, c)
         c.aritmetice += 1
+
 
 def partition(arr, low, high, c: Counter):
     p = arr[low]
@@ -115,6 +120,7 @@ def partition(arr, low, high, c: Counter):
     c.aritmetice += 2
     return l
 
+
 def binary_search_di(arr, low, high, target, c: Counter):
     c.iteratii_apeluri += 1
     c.comparatii += 1
@@ -136,6 +142,26 @@ def binary_search_di(arr, low, high, target, c: Counter):
         c.aritmetice += 1
         return binary_search_di(arr, mid + 1, high, target, c)
 
+
+def construieste_worst_merge(arr):
+    if len(arr) <= 1:
+        return arr
+    stanga = construieste_worst_merge(arr[0::2])
+    dreapta = construieste_worst_merge(arr[1::2])
+    return stanga + dreapta
+
+
+def construieste_best_quick(vals):
+    n = len(vals)
+    if n <= 1:
+        return vals[:]
+    m = n // 2
+    g_stanga = construieste_best_quick(vals[:m])
+    g_dreapta = construieste_best_quick(vals[m + 1:])
+    stanga = g_stanga[1:] + g_stanga[:1]
+    return [vals[m]] + stanga + g_dreapta
+
+
 def genereaza_intrare(algoritm, caz, n):
     if algoritm == "MergeSort":
         if caz == "favorabil":
@@ -145,13 +171,11 @@ def genereaza_intrare(algoritm, caz, n):
             random.shuffle(arr)
             return arr
         elif caz == "defavorabil":
-            return list(range(n, 0, -1))
+            return construieste_worst_merge(list(range(n)))
 
     elif algoritm == "QuickSort":
         if caz == "favorabil":
-            arr = list(range(n))
-            random.shuffle(arr)
-            return arr
+            return construieste_best_quick(list(range(n)))
         elif caz == "mediu":
             arr = list(range(n))
             random.shuffle(arr)
@@ -162,11 +186,12 @@ def genereaza_intrare(algoritm, caz, n):
     elif algoritm == "BinarySearch":
         arr = sorted(list(range(n)))
         if caz == "favorabil":
-            return arr, arr[(n-1) // 2]
+            return arr, arr[(n - 1) // 2]
         elif caz == "mediu":
             return arr, random.choice(arr)
         elif caz == "defavorabil":
             return arr, -999
+
 
 def masoara_algoritm(algoritm, caz, n):
     c = Counter()
@@ -181,21 +206,47 @@ def masoara_algoritm(algoritm, caz, n):
         binary_search_di(arr, 0, len(arr) - 1, target, c)
     return c
 
-OUT = "C:/Users/Cula Cristian/Documents/Laboratoare-Lucrari-UTM/an2sem3/apa/lab2"
-n_values = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 
+REPETARI = 20 
+
+
+def masoara_nop(algoritm, caz, n):
+    if caz != "mediu":
+        return masoara_algoritm(algoritm, caz, n).Nop
+
+    if algoritm == "BinarySearch":
+        arr = list(range(n))
+        total = 0
+        for target in arr:
+            c = Counter()
+            binary_search_di(arr, 0, n - 1, target, c)
+            total += c.Nop
+        return round(total / n)
+
+
+    total = sum(masoara_algoritm(algoritm, caz, n).Nop for _ in range(REPETARI))
+    return round(total / REPETARI)
+
+n_values = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 cazuri = ["favorabil", "mediu", "defavorabil"]
 algoritmi = ["MergeSort", "QuickSort", "BinarySearch"]
 
+rezultate = {alg: {caz: [] for caz in cazuri} for alg in algoritmi}
 for caz in cazuri:
-    randuri = []
     for n in n_values:
-        rand = {"n": n}
         for alg in algoritmi:
-            c = masoara_algoritm(alg, caz, n)
-            rand[f"{alg} (Nop)"] = c.Nop
-        randuri.append(rand)
-    
-    df_caz = pd.DataFrame(randuri)
+            rezultate[alg][caz].append(masoara_nop(alg, caz, n))
+
+for caz in cazuri:
+    df = pd.DataFrame({"n": n_values})
+    for alg in algoritmi:
+        df[alg] = rezultate[alg][caz]
     print(f"\nCazul {caz}")
-    print(df_caz.to_string(index=False))
+    print(df.to_string(index=False))
+
+for alg in algoritmi:
+    df = pd.DataFrame({"n": n_values})
+    for caz in cazuri:
+        df[caz] = rezultate[alg][caz]
+    print(f"\nAlgoritmul {alg}")
+    print(df.to_string(index=False))

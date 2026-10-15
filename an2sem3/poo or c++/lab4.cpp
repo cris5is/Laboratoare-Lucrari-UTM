@@ -15,12 +15,12 @@ public:
     }
     void set_nrPagini(int nrPagini)
     {
-        if (!(1 < nrPagini < 1000))
+        if (nrPagini <= 1 || nrPagini >= 1000)
         {
-            cout << "Eroare: nrPagini trebuie sa fie intre 1 si 100" << endl;
-            return;
+            cout << "Eroare: nrPagini trebuie sa fie intre 1 si 1000" << endl;
         }
-        this->nrPagini = nrPagini;
+        else
+            this->nrPagini = nrPagini;
     }
     void afiseaza()
     {
@@ -35,15 +35,13 @@ public:
             cout << "Eroare: titlu nu trebuie sa fie gol" << endl;
         }
         else
-        {
             this->titlu = titlu;
-            set_nrPagini(nrPagini);
-        }
+        set_nrPagini(nrPagini);
         cout << "Constructor (Document) apelat pentru " << this->titlu << endl;
     }
     ~Document()
     {
-        cout << "Destructor (Document) apelat pentru" << this->titlu << endl;
+        cout << "Destructor (Document) apelat pentru " << this->titlu << endl;
     }
 };
 class DocumentOficial : public Document
@@ -78,7 +76,7 @@ public:
     }
     ~DocumentOficial()
     {
-        cout << "Destructor (DocumentOficial) apelat pentru" << this->titlu << endl;
+        cout << "Destructor (DocumentOficial) apelat pentru " << this->titlu << endl;
     }
 };
 class Contract : public DocumentOficial
@@ -95,7 +93,7 @@ public:
     }
     Contract(string titlu, int nrPagini, string nrInregistrare, double valoareLei) : DocumentOficial(titlu, nrPagini, nrInregistrare)
     {
-        valoareLei = 1.0;
+        this->valoareLei = 1.0;
         if (valoareLei <= 0)
         {
             cout << "Eroare: valoareLei > 0" << endl;
@@ -106,7 +104,7 @@ public:
     }
     ~Contract()
     {
-        cout << "Destructor (Contract) apelat pentru" << this->titlu << endl;
+        cout << "Destructor (Contract) apelat pentru " << this->titlu << endl;
     }
 };
 class SemnaturaDigitala
@@ -141,7 +139,7 @@ public:
     }
     ~SemnaturaDigitala()
     {
-        cout << "Constructor (SemnaturaDigitala) apelat pentru " << this->algoritm << endl;
+        cout << "Destructor (SemnaturaDigitala) apelat pentru " << this->algoritm << endl;
     }
 };
 class ContractElectronic : public Contract, public SemnaturaDigitala
@@ -168,21 +166,33 @@ public:
     ContractElectronic(string titlu, int nrPagini, string nrInregistrare, double valoareLei, string algoritm, int zileValabilitate) : Contract(titlu, nrPagini, nrInregistrare, valoareLei), SemnaturaDigitala(algoritm)
     {
         this->zileValabilitate = 2;
-        if (!(1 < zileValabilitate < 3650))
+        if (zileValabilitate <= 1 || zileValabilitate >= 3650)
         {
             cout << "Eroare: zileValabilitate trebuie sa fie intre 1 si 3650" << endl;
         }
         else
             this->zileValabilitate = zileValabilitate;
-        cout << "Constructor (Contract) apelat pentru " << this->titlu << endl;
+        cout << "Constructor (ContractElectronic) apelat pentru " << this->titlu << endl;
     }
     ~ContractElectronic()
     {
-        cout << "Constructor (ContractElectronic) apelat pentru " << this->titlu << endl;
+        cout << "Destructor (ContractElectronic) apelat pentru " << this->titlu << endl;
     }
 };
 int main()
 {
+    Contract *c1 = new Contract("Ceva", 12, "U_suca", 356.0);
+    delete c1;
+    Contract c_test("", 1001, "", -2.0);
 
+    ContractElectronic c_test_restu("nimic", 746, "Uiaibu", 5.0, "RSA", 28);
     return 0;
 }
+// Creează un obiect al derivatei de nivel 2 și arată din mesaje ordinea constructorilor de-a
+// lungul lanțului (bază → nivel 1 → nivel 2) și a destructorilor (în ordine inversă);
+// • Creează un obiect al clasei finale și arată din mesaje ordinea constructorilor (clasa de bază
+// → nivel 1 → nivel 2 → a doua clasă de bază → clasa finală) și a destructorilor (în ordine
+// inversă);
+// • Apelează afiseaza() pe fiecare obiect;
+// • Apelează, pe obiectul clasei finale, metodele proprii moștenite din ambele baze, apoi
+// metodele proprii ale clasei finale;
