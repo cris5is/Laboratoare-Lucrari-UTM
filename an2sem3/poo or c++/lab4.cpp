@@ -91,6 +91,17 @@ public:
              << this->obtineNrPagini() << " NrInregistrare: " << this->nrInregistrare
              << " ValoareaLei: " << this->valoareLei << endl;
     }
+    double penalitate(int zile)
+    {
+        if (zile > 0)
+        {
+            double suma = this->valoareLei * 0.001 * zile;
+            cout << this->titlu << ": penalitate " << suma << " lei" << endl;
+            return suma;
+        }
+        cout << "Eroare: zile > 0" << endl;
+        return -1;
+    }
     Contract(string titlu, int nrPagini, string nrInregistrare, double valoareLei) : DocumentOficial(titlu, nrPagini, nrInregistrare)
     {
         this->valoareLei = 1.0;
@@ -181,18 +192,30 @@ public:
 };
 int main()
 {
-    Contract *c1 = new Contract("Ceva", 12, "U_suca", 356.0);
+    Contract *c1 = new Contract("Ceva", 12, "U_cevainteresant", 356.0);
+    cout << endl;
+    c1->afiseaza();
+    cout << endl;
     delete c1;
-    Contract c_test("", 1001, "", -2.0);
-
-    ContractElectronic c_test_restu("nimic", 746, "Uiaibu", 5.0, "RSA", 28);
+    cout << endl;
+    Contract *c_test = new Contract("", 1001, "", -2.0);
+    cout << endl;
+    c_test->afiseaza();
+    cout << endl;
+    delete c_test;
+    cout << endl;
+    ContractElectronic c_test_restu("nimic", 746, "da", 5.0, "RSA", 28);
+    cout << endl;
+    c_test_restu.afiseaza();
+    cout << endl;
+    cout << "Este urgent: " << (c_test_restu.esteUrgent() ? "da" : "nu") << endl;
+    cout << endl;
+    c_test_restu.penalitate(5);
+    cout << endl;
+    c_test_restu.semneaza("Eu");
+    cout << endl;
+    cout << c_test_restu.timpCitire() << endl;
+    cout << endl;
+    c_test_restu.rezumat();
     return 0;
 }
-// Creează un obiect al derivatei de nivel 2 și arată din mesaje ordinea constructorilor de-a
-// lungul lanțului (bază → nivel 1 → nivel 2) și a destructorilor (în ordine inversă);
-// • Creează un obiect al clasei finale și arată din mesaje ordinea constructorilor (clasa de bază
-// → nivel 1 → nivel 2 → a doua clasă de bază → clasa finală) și a destructorilor (în ordine
-// inversă);
-// • Apelează afiseaza() pe fiecare obiect;
-// • Apelează, pe obiectul clasei finale, metodele proprii moștenite din ambele baze, apoi
-// metodele proprii ale clasei finale;
